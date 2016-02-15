@@ -13,9 +13,9 @@ To get started
 All three of these require these models:
 ========================================
 
-```rails g model User name email password_digest phone
-rails g model Role name
-rails g model UserRole user:references role:references```
+    padrino g model User name email password_digest phone
+    padrino g model Role name
+    padrino g model UserRole user:references role:references
 
 In addition, here's the details and extra models for each of these:
 
@@ -26,8 +26,8 @@ Track car categories with a model that is hierarchical, i.e. it references itsel
 ```padrino g model Category name parent:references```
 
 And then in the Category model:
-```has_many :children, class_name: "Category", foreign_key: :parent_id, inverse_of: :parent
-:parent, class_name: "Category", foreign_key: :parent_id, inverse_of: :children```
+    has_many :children, class_name: "Category", foreign_key: :parent_id, inverse_of: :parent
+    belongs_to :parent, class_name: "Category", foreign_key: :parent_id, inverse_of: :children
 
 From there, you need to track which category each car belongs to, and also store year, make, and model information.
 
