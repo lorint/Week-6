@@ -1,9 +1,9 @@
 Pick one of three projects!
 ==========================
 You can build one of these:
-  - Car Rental (includes hierarchy, woooo!)
-  - Banking
-  - Medical
+  - Car Rental (includes hierarchy via a self-referencing model, woooo!)
+  - Banking (perhaps the simplest of the three)
+  - Medical (tracks doctor's appointments and prescriptions)
 
 To get started
 ==============
@@ -13,19 +13,23 @@ To get started
 All three of these require these models:
 ========================================
 
-rails g model User name email password_digest phone
+```rails g model User name email password_digest phone
 rails g model Role name
-rails g model UserRole user:references role:references
+rails g model UserRole user:references role:references```
 
 In addition, here's the details and extra models for each of these:
 
 Car Rental
 ==========
-Track car categories with a model that is hierarchical, i.e. it references itself.  Here's the idea:
+Track car categories with a model that is hierarchical, i.e. it references itself.  Top-level categories could be compact, mid-sized, luxury, and van.  Under luxury could be sports cars.  Under mid-sized could be hybrid.  Here's how to build this:
 
 ```padrino g model Category name parent:references```
 
-Track cars in the car categories, storing year, make, and model information, as well as which category each car belongs to.
+And then in the Category model:
+```has_many :children, class_name: "Category", foreign_key: :parent_id, inverse_of: :parent
+:parent, class_name: "Category", foreign_key: :parent_id, inverse_of: :children```
+
+From there, you need to track which category each car belongs to, and also store year, make, and model information.
 
 Track rentals for each car including pick-up time, drop-off time, starting and ending mileage, fuel level upon return, the customer, the employee at the pick-up counter, and the employee responsible when the car was turned in.
 
@@ -41,7 +45,7 @@ Track bank accounts based on an account type that includes:
 
 Track accounts that are of a certain account type, and reference the employee who set up the account, and the customer themselves.
 
-Track transactions for each account with a flag if it's a debit or credit, the amount of the transaction, if it was performed at an ATM, the notes for the transaction, and the "work date" (effective date) of the transaction.
+Track transactions for each account with a boolean flag if it's a debit or credit, the amount of the transaction, if it was performed at an ATM, the notes for the transaction, and the "work date" (effective date) of the transaction.
 
 Medical
 =======
